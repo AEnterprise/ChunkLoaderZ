@@ -1,0 +1,16 @@
+[
+{
+  "modid": "chunkloaderz",
+  "name": "ChunkLoaderZ",
+  "description": "Chunkloading mod for 1.8",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["AEnterprise"],
+  "credits": "AEnterprise",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
