@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        
+        "model": "chunkloaderz:Anchored_Pearl.obj"
+     },
+    "variants": {
+        "inventory": [{
+            "transform": "forge:default-item"
+            }],
+        "normal": [{
+
+        	}]
+    }
+}

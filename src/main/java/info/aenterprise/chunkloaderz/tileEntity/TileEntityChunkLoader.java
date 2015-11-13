@@ -1,7 +1,6 @@
 package info.aenterprise.chunkloaderz.tileEntity;
 
 import info.aenterprise.chunkloaderz.ChunkLoaderZ;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -16,7 +15,6 @@ import java.util.List;
  */
 public class TileEntityChunkLoader extends TileEntity implements IUpdatePlayerListBox {
 	private Ticket ticket;
-	private boolean wantsTicket = true;
 
 	public TileEntityChunkLoader() {
 		super();
@@ -26,9 +24,17 @@ public class TileEntityChunkLoader extends TileEntity implements IUpdatePlayerLi
 	public void update() {
 		if (worldObj.isRemote)
 			return;
-		if (wantsTicket && ticket == null) {
-			setTicket(ForgeChunkManager.requestTicket(ChunkLoaderZ.INSTANCE, worldObj, ForgeChunkManager.Type.NORMAL));
+		if (canChunkload()) {
+			if (ticket == null) {
+				setTicket(ForgeChunkManager.requestTicket(ChunkLoaderZ.INSTANCE, worldObj, ForgeChunkManager.Type.NORMAL));
+			}
+		} else if (ticket!= null) {
+			release();
 		}
+	}
+
+	public boolean canChunkload() {
+		return true;
 	}
 
 	public void setTicket(Ticket ticket) {
@@ -40,7 +46,6 @@ public class TileEntityChunkLoader extends TileEntity implements IUpdatePlayerLi
 			for (ChunkCoordIntPair chunk: getChunksAround(pos.getX() >> 4, pos.getZ() >> 4, 1)) {
 				ForgeChunkManager.forceChunk(ticket, chunk);
 			}
-			System.out.println("chunks loaded");
 		}
 	}
 

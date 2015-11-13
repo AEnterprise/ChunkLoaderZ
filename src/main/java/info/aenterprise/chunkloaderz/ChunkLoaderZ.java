@@ -3,12 +3,14 @@ package info.aenterprise.chunkloaderz;
 import info.aenterprise.chunkloaderz.blocks.BlockLoader;
 import info.aenterprise.chunkloaderz.core.ChunkManager;
 import info.aenterprise.chunkloaderz.core.CommonProxy;
+import info.aenterprise.chunkloaderz.core.EventListener;
+import info.aenterprise.chunkloaderz.items.ItemLoader;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -37,12 +39,19 @@ public class ChunkLoaderZ {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		OBJLoader.instance.addDomain("chunkloaderz");
 		BlockLoader.init();
+		ItemLoader.init();
+		ItemLoader.addRecipes();
+		BlockLoader.addRecipes();
 	}
 
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, ChunkManager.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(new EventListener());
+		proxy.init();
+
 	}
 }

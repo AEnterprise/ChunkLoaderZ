@@ -33,7 +33,7 @@ group= "info.aenterprise.chunkloaderz" // http://maven.apache.org/guides/mini/gu
 archivesBaseName = "ChunkLoaderZ-${config.version.mc}-"
 
 minecraft {
-    version = "1.8-11.14.3.1562"
+    version = "1.8-11.14.4.1563"
     runDir = "run"
     replace "@MODVERSION@", config.version.mod
     
