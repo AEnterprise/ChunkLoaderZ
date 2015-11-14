@@ -1,24 +1,24 @@
 {
     "forge_marker": 1,
     "defaults": {
-      "textures": { "all": "chunkloaderz:blocks/chunkloaderStructure" }
+      "textures": { "all": "chunkloaderz:blocks/chunkloader" },
+      "model": "cube_all"
      },
     "variants": {
         "normal": [{}],
         "inventory": [{}],
       "master=true,visible=false":  [{
         "model": "chunkloaderz:chunkloaderStructure.obj",
-        "textures": {"all": "chunkloaderz:blocks/chunkloaderStructure"}
+        "textures": {"all": "chunkloaderz:blocks/chunkloaderStructure"},
+        "transform": {
+          "translation": [0.5, 0, -0.5]
+        }
       }],
-      "master=false,visible=true":  [{"textures": {"all": "chunkloaderz:blocks/chunkloader"}            }],
+      "master=false,visible=true":  [{             }],
       "master=true,visible=true":   [{/*shouldn't ever heapen*/            }],
       "master=false,visible=false": [{
-        "textures": { "all": "chunkloaderz:blocks/chunkloaderStructure" },
-        "model": "chunkloaderz:chunkloaderStructure.obj",//"cube_all"
-        "transform": {
-          "scale": 3,
-          "translation": [0.5, 1, -0.5]
-        }
+        "textures": { "all": "chunkloaderz:blocks/invisible" }
+
       }]
     }
 }

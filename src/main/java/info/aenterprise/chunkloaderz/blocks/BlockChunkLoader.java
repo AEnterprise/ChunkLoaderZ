@@ -6,6 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * Created by AEnterprise
@@ -28,6 +30,38 @@ public class BlockChunkLoader extends Block {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return 0;
+		int meta = 0;
+		if (state.getValue(VISIBLE).equals(false))
+			meta++;
+		if (state.getValue(MASTER).equals(true))
+			meta +=2;
+		return meta;
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		IBlockState state = getDefaultState();
+		switch (meta) {
+			case 0: return state.withProperty(VISIBLE, true).withProperty(MASTER, false);
+			case 1: return state.withProperty(VISIBLE, false).withProperty(MASTER, false);
+			case 2: return state.withProperty(VISIBLE, false).withProperty(MASTER, true);
+			case 3: return state.withProperty(VISIBLE, true).withProperty(MASTER, true); //shouldn't ever heapen, here for completions sake
+		}
+		return state;
+	}
+
+	public void hide(World world, BlockPos pos) {
+		world.setBlockState(pos, blockState.getBaseState().withProperty(VISIBLE, false).withProperty(MASTER, false));
+	}
+
+	@Override
+	public boolean isNormalCube() {
+		return false;
+	}
+
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
 	}
 }
