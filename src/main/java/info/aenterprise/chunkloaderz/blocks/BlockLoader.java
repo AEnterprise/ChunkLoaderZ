@@ -16,7 +16,10 @@ public class BlockLoader {
 	public static Block anchoredPearl;
 
 	public static void init() {
-		chunkLoader = registerBlock("blockChunkLoader");
+		chunkLoader = new BlockChunkLoader();
+		GameRegistry.registerBlock(chunkLoader, "blockChunkLoader");
+		ChunkLoaderZ.proxy.registerInventoryModel(chunkLoader, "blockChunkLoader");
+
 
 		anchoredPearl = new BlockAnhoredPearl();
 		GameRegistry.registerBlock(anchoredPearl, "anchoredPearl");
