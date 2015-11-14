@@ -3,7 +3,6 @@ package info.aenterprise.chunkloaderz.blocks;
 import info.aenterprise.chunkloaderz.ChunkLoaderZ;
 import info.aenterprise.chunkloaderz.items.ItemLoader;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
-import info.aenterprise.chunkloaderz.tileEntity.TileEntityChunkLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
@@ -17,15 +16,12 @@ public class BlockLoader {
 	public static Block anchoredPearl;
 
 	public static void init() {
-		chunkLoader = new BlockChunkLoader();
-		GameRegistry.registerBlock(chunkLoader, "blockChunkLoader");
-		ChunkLoaderZ.proxy.registerInventoryModel(chunkLoader, "blockChunkLoader");
+		chunkLoader = registerBlock("blockChunkLoader");
 
 		anchoredPearl = new BlockAnhoredPearl();
 		GameRegistry.registerBlock(anchoredPearl, "anchoredPearl");
 		ChunkLoaderZ.proxy.registerInventoryModel(anchoredPearl, "anchoredPearl");
 
-		GameRegistry.registerTileEntity(TileEntityChunkLoader.class, "chunkloader");
 		GameRegistry.registerTileEntity(TileEntityAnchoredPearl.class, "anchoredpearl");
 	}
 

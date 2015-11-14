@@ -39,11 +39,11 @@ public class ChunkLoaderZ {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		OBJLoader.instance.addDomain("chunkloaderz");
 		BlockLoader.init();
 		ItemLoader.init();
 		ItemLoader.addRecipes();
 		BlockLoader.addRecipes();
+		proxy.preInit();
 	}
 
 

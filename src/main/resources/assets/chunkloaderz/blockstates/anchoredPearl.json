@@ -1,15 +1,24 @@
 {
     "forge_marker": 1,
     "defaults": {
-        
+        "transform": "forge:default-block",
         "model": "chunkloaderz:Anchored_Pearl.obj"
-     },
+    },
     "variants": {
-        "inventory": [{
-            "transform": "forge:default-item"
-            }],
-        "normal": [{
-
-        	}]
+        "inventory": [{"transform": "forge:default-block"}],
+        "normal": [{  	}],
+        "scale": {
+            0: {"transform":  {"scale": 1} },
+            1: {"transform":  {"scale": 1} },
+            2: {"transform":  {"scale": 0.9} },
+            3: {"transform":  {"scale": 0.8} },
+            4: {"transform":  {"scale": 0.7} },
+            5: {"transform":  {"scale": 0.6} },
+            6: {"transform":  {"scale": 0.5} },
+            7: {"transform":  {"scale": 0.4} },
+            8: {"transform":  {"scale": 0.3} },
+            9: {"transform":  {"scale": 0.2} },
+            10: {"transform": {"scale": 0.1} }
+            }
     }
 }

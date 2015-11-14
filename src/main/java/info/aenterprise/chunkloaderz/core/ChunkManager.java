@@ -1,6 +1,6 @@
 package info.aenterprise.chunkloaderz.core;
 
-import info.aenterprise.chunkloaderz.tileEntity.TileEntityChunkLoader;
+import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -24,9 +24,9 @@ public class ChunkManager implements ForgeChunkManager.LoadingCallback {
 			int y = ticket.getModData().getInteger("y");
 			int z = ticket.getModData().getInteger("z");
 			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-			if (tile instanceof TileEntityChunkLoader) {
-				TileEntityChunkLoader chunkLoader = (TileEntityChunkLoader) tile;
-				chunkLoader.setTicket(ticket);
+			if (tile instanceof TileEntityAnchoredPearl) {
+				TileEntityAnchoredPearl pearl = (TileEntityAnchoredPearl) tile;
+				pearl.setTicket(ticket);
 			}
 		}
 	}
