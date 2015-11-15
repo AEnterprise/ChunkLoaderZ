@@ -3,6 +3,7 @@ package info.aenterprise.chunkloaderz.blocks;
 import info.aenterprise.chunkloaderz.ChunkLoaderZ;
 import info.aenterprise.chunkloaderz.items.ItemLoader;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
+import info.aenterprise.chunkloaderz.tileEntity.TileEntityChunkLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ public class BlockLoader {
 		ChunkLoaderZ.proxy.registerInventoryModel(anchoredPearl, "anchoredPearl");
 
 		GameRegistry.registerTileEntity(TileEntityAnchoredPearl.class, "anchoredpearl");
+		GameRegistry.registerTileEntity(TileEntityChunkLoader.class, "chunkloader");
 	}
 
 	public static void addRecipes() {

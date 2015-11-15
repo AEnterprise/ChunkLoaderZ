@@ -1,7 +1,7 @@
 package info.aenterprise.chunkloaderz.blocks;
 
 import info.aenterprise.chunkloaderz.ChunkLoaderZ;
-import info.aenterprise.chunkloaderz.blocks.properties.PropertyScale;
+import info.aenterprise.chunkloaderz.blocks.properties.PropertyRange;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -21,7 +21,7 @@ import java.util.List;
  * Created by AEnterprise
  */
 public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
-	private static final PropertyScale SCALE = new PropertyScale("scale", 0, 10, 1);
+	private static final PropertyRange SCALE = new PropertyRange("scale", 0, 10, 1);
 
 	public BlockAnhoredPearl() {
 		super(Material.iron);
@@ -77,5 +77,9 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 		return 0;
 	}
 
-
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		super.breakBlock(worldIn, pos, state);
+		worldIn.removeTileEntity(pos);
+	}
 }

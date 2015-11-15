@@ -6,10 +6,10 @@ import java.util.Collection;
 /**
  * Created by AEnterprise
  */
-public class PropertyScale extends PropertyBase {
+public class PropertyRange extends PropertyBase {
 	private final Collection allowedValues;
 
-	public PropertyScale(String name, int start, int end, int increment) {
+	public PropertyRange(String name, int start, int end, int increment) {
 		super(name, Integer.class);
 		allowedValues = new ArrayList();
 		for (int i = start; i <= end; i += increment) {

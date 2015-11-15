@@ -40,16 +40,20 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 	}
 
 	public void form() {
+		int status = 1;
 		for (int x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
 			for (int y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
 				for (int z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 					if (x == pos.getX() && y == pos.getY() && z == pos.getZ())
 						continue;
-					BlockPos pos = new BlockPos(x, y, z);
-					((BlockChunkLoader) worldObj.getBlockState(pos).getBlock()).hide(worldObj, pos);
+					BlockPos pos2 = new BlockPos(x, y, z);
+					((TileEntityChunkLoader) worldObj.getTileEntity(pos2)).setStatus(status);
+					status++;
+					worldObj.markBlockForUpdate(pos2);
 				}
 			}
 		}
+		worldObj.markBlockRangeForRenderUpdate(new BlockPos(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1), new BlockPos(pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
 	}
 
 	public boolean canChunkload() {
@@ -62,7 +66,7 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 				for (int z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 					if (x == pos.getX() && y == pos.getY() && z == pos.getZ())
 						continue;
-					if (worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() != BlockLoader.chunkLoader)
+					if (worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() != BlockLoader.chunkLoader || !(worldObj.getTileEntity(new BlockPos(x, y, z)) instanceof TileEntityChunkLoader))
 						return false;
 				}
 			}
