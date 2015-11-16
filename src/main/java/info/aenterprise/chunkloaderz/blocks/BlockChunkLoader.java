@@ -31,7 +31,7 @@ public class BlockChunkLoader extends Block {
 	public BlockChunkLoader() {
 		super(Material.iron);
 		setUnlocalizedName("blockChunkLoader");
-		setLightLevel(15);
+		setLightLevel(1.0f);
 		setLightOpacity(0);
 		setCreativeTab(ChunkLoaderZ.creativeTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(STATUS, EnumStatus.ALONE));
@@ -77,13 +77,8 @@ public class BlockChunkLoader extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getMixedBrightnessForBlock(IBlockAccess access, BlockPos pos) {
-	    IBlockState state = access.getBlockState(pos);
-	    // Just in case the state doesn't have the property. We don't want to cause a crash.
-	    if (state.getBlock() != this) return state.getBlock().getMixedBrightnessForBlock(access, pos);
-	    // If its not the master, then the default works fine
-	    if (state.getValue(STATUS) != EnumStatus.MASTER) return super.getMixedBrightnessForBlock(access, pos);
 	    // Return the maximum light value to stop any blocks above lighting incorectly
-	    return 0xFFFFFF;
+	    return 0xF << 0x14 | 0xF << 0x4;
 	}
 
 	@Override
