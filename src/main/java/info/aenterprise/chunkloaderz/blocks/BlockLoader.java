@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * Created by AEnterprise
  */
 public class BlockLoader {
-	public static Block chunkLoader;
+	public static BlockChunkLoader chunkLoader;
 	public static Block anchoredPearl;
 
 	public static void init() {
