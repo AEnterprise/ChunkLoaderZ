@@ -1,8 +1,9 @@
 package info.aenterprise.chunkloaderz.tileEntity;
 
-import info.aenterprise.chunkloaderz.ChunkLoaderZ;
-import info.aenterprise.chunkloaderz.blocks.BlockChunkLoader;
-import info.aenterprise.chunkloaderz.blocks.BlockLoader;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -11,10 +12,11 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
+
 import net.minecraftforge.common.ForgeChunkManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import info.aenterprise.chunkloaderz.ChunkLoaderZ;
+import info.aenterprise.chunkloaderz.blocks.BlockLoader;
 
 /**
  * Created by AEnterprise
@@ -40,20 +42,16 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 	}
 
 	public void form() {
-		int status = 1;
-		for (int x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
-			for (int y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
-				for (int z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
-					if (x == pos.getX() && y == pos.getY() && z == pos.getZ())
-						continue;
-					BlockPos pos2 = new BlockPos(x, y, z);
-					((TileEntityChunkLoader) worldObj.getTileEntity(pos2)).setStatus(status);
-					status++;
-					worldObj.markBlockForUpdate(pos2);
-				}
-			}
-		}
-		worldObj.markBlockRangeForRenderUpdate(new BlockPos(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1), new BlockPos(pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
+	    for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
+	        IBlockState state = getWorld().getBlockState(pos);
+	        if (state.getBlock() == BlockLoader.chunkLoader) {
+	            if (pos.equals(getPos().up())) {
+                    BlockLoader.chunkLoader.formMaster(getWorld(), pos);
+	            } else {
+	                BlockLoader.chunkLoader.formSlave(getWorld(), pos);
+	            }
+	        }
+	    }
 	}
 
 	public boolean canChunkload() {
@@ -61,17 +59,15 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 	}
 
 	public boolean validFrame() {
-		for (int x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
-			for (int y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
-				for (int z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
-					if (x == pos.getX() && y == pos.getY() && z == pos.getZ())
-						continue;
-					if (worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() != BlockLoader.chunkLoader || !(worldObj.getTileEntity(new BlockPos(x, y, z)) instanceof TileEntityChunkLoader))
-						return false;
-				}
-			}
-		}
-		return true;
+	    for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
+	        if (pos.equals(getPos()))
+	            continue;
+            IBlockState state = getWorld().getBlockState(pos);
+            if (state.getBlock() != BlockLoader.chunkLoader) {
+                return false;
+            }
+	    }
+	    return true;
 	}
 
 	public void setTicket(ForgeChunkManager.Ticket ticket) {
@@ -87,7 +83,15 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 	}
 
 	public void release() {
+	    if (ticket == null) return;
 		ForgeChunkManager.releaseTicket(ticket);
+        ticket = null;
+		for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
+	        IBlockState state = getWorld().getBlockState(pos);
+	        if (state.getBlock() == BlockLoader.chunkLoader) {
+	            BlockLoader.chunkLoader.deform(getWorld(), pos);
+	        }
+	    }
 	}
 
 	private List<ChunkCoordIntPair> getChunksAround(int chunkX, int chunkZ, int radius) {

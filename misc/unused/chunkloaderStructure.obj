@@ -1,5 +1,6 @@
 # Converted with GloomyFolken's tcn2obj Converter
 #
+mtllib Anchored_Pearl.mtl
 o back
 v 0.500000 -0.037500 0.250000
 v -0.500000 -0.037500 0.250000

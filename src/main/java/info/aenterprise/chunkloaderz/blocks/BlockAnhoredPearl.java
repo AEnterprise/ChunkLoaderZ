@@ -26,6 +26,7 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	public BlockAnhoredPearl() {
 		super(Material.iron);
 		setUnlocalizedName("anchoredPearl");
+		setLightLevel(15);
 		setCreativeTab(ChunkLoaderZ.creativeTab);
 		this.isBlockContainer = true;
 		this.setDefaultState(this.blockState.getBaseState().withProperty(SCALE, 1));
@@ -49,7 +50,7 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 
 
 	@Override
-	public boolean isNormalCube() {
+	public boolean isFullCube() {
 		return false;
 	}
 
