@@ -30,7 +30,7 @@ buildProps.withReader {
 
 version = "${config.version.mod}"
 group= "info.aenterprise.chunkloaderz" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "ChunkLoaderZ-${config.version.mc}-"
+archivesBaseName = "ChunkLoaderZ-${config.version.mc}"
 
 minecraft {
     version = "1.8-11.14.4.1563"

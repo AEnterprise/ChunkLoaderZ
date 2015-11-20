@@ -6,22 +6,26 @@ import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by AEnterprise
  */
 public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	private static final PropertyRange SCALE = new PropertyRange("scale", 0, 10, 1);
+	private static final PropertyEnum LOCATION = PropertyEnum.create("location", EnumLocation.class);
 
 	public BlockAnhoredPearl() {
 		super(Material.iron);
@@ -29,7 +33,7 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 		setLightLevel(15);
 		setCreativeTab(ChunkLoaderZ.creativeTab);
 		this.isBlockContainer = true;
-		this.setDefaultState(this.blockState.getBaseState().withProperty(SCALE, 1));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(SCALE, 1).withProperty(LOCATION, EnumLocation.HERE));
 	}
 
 	@Override
@@ -64,13 +68,13 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		TileEntity entity = worldIn.getTileEntity(pos);
 		if (entity instanceof TileEntityAnchoredPearl)
-			return state.withProperty(SCALE, ((TileEntityAnchoredPearl) entity).getScale());
-		return state.withProperty(SCALE, 1);
+			return state.withProperty(SCALE, ((TileEntityAnchoredPearl) entity).getScale()).withProperty(LOCATION, ((TileEntityAnchoredPearl) entity).isStillHere() ? EnumLocation.HERE : EnumLocation.THERE);
+		return state.withProperty(SCALE, 1).withProperty(LOCATION, EnumLocation.HERE);
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, SCALE);
+		return new BlockState(this, SCALE, LOCATION);
 	}
 
 	@Override
@@ -82,5 +86,15 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		super.breakBlock(worldIn, pos, state);
 		worldIn.removeTileEntity(pos);
+	}
+
+	public enum EnumLocation implements IStringSerializable	{
+		HERE,
+		THERE;
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ROOT);
+		}
 	}
 }

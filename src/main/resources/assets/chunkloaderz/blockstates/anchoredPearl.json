@@ -2,23 +2,34 @@
     "forge_marker": 1,
     "defaults": {
         "transform": "forge:default-block",
-        "model": "chunkloaderz:Anchored_Pearl.obj"
+        "model": "chunkloaderz:Anchored_Pearl.obj",
+      "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl"}
+
     },
     "variants": {
         "inventory": [{"transform": "forge:default-block"}],
         "normal": [{  	}],
-        "scale": {
-            0: {"transform":  {"scale": 1} },
-            1: {"transform":  {"scale": 1} },
-            2: {"transform":  {"scale": 0.9} },
-            3: {"transform":  {"scale": 0.8} },
-            4: {"transform":  {"scale": 0.7} },
-            5: {"transform":  {"scale": 0.6} },
-            6: {"transform":  {"scale": 0.5} },
-            7: {"transform":  {"scale": 0.4} },
-            8: {"transform":  {"scale": 0.3} },
-            9: {"transform":  {"scale": 0.2} },
-            10: {"transform": {"scale": 0.1} }
-            }
+      "location=here,scale=0":  [{"transform":  {"scale": 1}}],
+      "location=here,scale=1":  [{"transform":  {"scale": 1}}],
+      "location=here,scale=2":  [{"transform":  {"scale": 0.9}}],
+      "location=here,scale=3":  [{"transform":  {"scale": 0.8}}],
+      "location=here,scale=4":  [{"transform":  {"scale": 0.7}}],
+      "location=here,scale=5":  [{"transform":  {"scale": 0.6}}],
+      "location=here,scale=6":  [{"transform":  {"scale": 0.5}}],
+      "location=here,scale=7":  [{"transform":  {"scale": 0.4}}],
+      "location=here,scale=8":  [{"transform":  {"scale": 0.3}}],
+      "location=here,scale=9":  [{"transform":  {"scale": 0.2}}],
+      "location=here,scale=10": [{"transform":  {"scale": 0.1}}],
+      "location=there,scale=0": [{"transform":  {"scale": 1}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=1": [{"transform":  {"scale": 1}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=2": [{"transform":  {"scale": 0.9}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=3": [{"transform":  {"scale": 0.8}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=4": [{"transform":  {"scale": 0.7}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=5": [{"transform":  {"scale": 0.6}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=6": [{"transform":  {"scale": 0.5}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=7": [{"transform":  {"scale": 0.4}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=8": [{"transform":  {"scale": 0.3}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=9": [{"transform":  {"scale": 0.2}, "textures": {"#texture": "chunkloaderz:blocks/anchored_pearl_ghost"}}],
+      "location=there,scale=10":[{"transform":  {"scale": 0.1}}]
     }
 }
