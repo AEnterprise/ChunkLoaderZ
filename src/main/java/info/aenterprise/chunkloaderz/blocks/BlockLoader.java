@@ -34,7 +34,7 @@ public class BlockLoader {
 
 	public static void addRecipes() {
 		GameRegistry.addSmelting(ItemLoader.brokenAnchoredPearl, new ItemStack(anchoredPearl), 0.5f);
-		GameRegistry.addRecipe(new ItemStack(chunkLoader, 26), "DED", "ESE", "DED", 'D', Blocks.diamond_block, 'E', Blocks.end_stone, 'S', Items.nether_star);
+		GameRegistry.addRecipe(new ItemStack(chunkLoader, 4), "SES", "E E", "SES", 'E', Blocks.end_stone, 'S', ItemLoader.enderPearlShard);
 	}
 
 	private static Block registerBlock(String name) {

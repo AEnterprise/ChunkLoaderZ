@@ -62,6 +62,7 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 			}
 			timer = 20;
 		}
+
 		if (!stillHere) return;
 
 		if (timeUntillTeleport <= 0) {
@@ -78,6 +79,9 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 			if (stillHere)
 				worldObj.setBlockToAir(pos);
 		}
+
+		if (hours + minutes + seconds + milliseconds <= 0)
+			worldObj.setBlockToAir(pos);
 	}
 
 	@SuppressWarnings("unchecked")
