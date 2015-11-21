@@ -2,6 +2,7 @@ package info.aenterprise.chunkloaderz.tileEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,17 +26,19 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 	private int scale = 1;
 	private int hours, minutes, seconds, milliseconds, timeUntillTeleport, timer;
 	private long lastTime;
-	private boolean stillHere, formedFrame;
+	private boolean stillHere, formedFrame, wantsToTeleport;
 	private BlockPos whereItWent;
+
+	private static final int RANGE = 32;
 
 	private ForgeChunkManager.Ticket ticket;
 
 	public TileEntityAnchoredPearl() {
-		hours = 5;
+		hours = 9;
 		lastTime = System.currentTimeMillis();
 		stillHere = true;
-		//timeUntillTeleport = (int) (500 + (worldObj.rand.nextDouble() * 1000));
-		timeUntillTeleport = 200;
+		Random random = new Random();
+		timeUntillTeleport = (int) (12000 + (random.nextDouble() * 60000));
 		timer = 20;
 	}
 
@@ -44,20 +47,25 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 	public void update() {
 		if (worldObj.isRemote) return;
 
+		if (wantsToTeleport) {
+			tryTeleporting();
+		}
+
 		timer--;
 		if (timer <= 0) {
-			if (validFrame() && stillHere) {
-				if (!formedFrame) form();
+			if (validFrame()) {
+				if (!formedFrame && stillHere) form();
 			} else {
-				timeUntillTeleport -= 20;
+				if (timeUntillTeleport > 0)
+					timeUntillTeleport -= 20;
 				if (formedFrame) deform();
 			}
 			timer = 20;
 		}
 		if (!stillHere) return;
 
-		if (timeUntillTeleport == 0) {
-			teleportAway();
+		if (timeUntillTeleport <= 0) {
+			wantsToTeleport = true;
 		}
 		if (canChunkload()) {
 			if (ticket == null) {
@@ -85,13 +93,41 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 		formedFrame = false;
 	}
 
-	private void teleportAway() {
-		stillHere = false;
-		worldObj.markBlockForUpdate(pos);
-		worldObj.markBlockRangeForRenderUpdate(pos, pos);
-		whereItWent = getPos();
-		release();
+	private void tryTeleporting() {
+		int x = ((int) Math.floor(RANGE / 2 * worldObj.rand.nextDouble())) - RANGE + getPos().getX();
+		int y = ((int) Math.floor(RANGE / 2 * worldObj.rand.nextDouble())) - RANGE + getPos().getY();
+		int z = ((int) Math.floor(RANGE / 2 * worldObj.rand.nextDouble())) - RANGE + getPos().getZ();
+
+		if (y < 0)
+			y = 0;
+		if (y > 254)
+			y = 254;
+
+		while (y < 254) {
+			BlockPos target = new BlockPos(x, y, z);
+			System.out.println(String.format("Considering target location(%s)", target.toString()));
+			if (worldObj.isAirBlock(target)) {
+				worldObj.setBlockState(target, BlockLoader.anchoredPearl.getDefaultState());
+				NBTTagCompound tag = new NBTTagCompound();
+				writeToTeleportNBT(tag);
+				TileEntity  entity = worldObj.getTileEntity(target);
+				if (entity instanceof TileEntityAnchoredPearl) {
+					((TileEntityAnchoredPearl) entity).readFromTeleportNBT(tag);
+				}
+				stillHere = false;
+				worldObj.markBlockForUpdate(pos);
+				worldObj.markBlockRangeForRenderUpdate(pos, pos);
+				whereItWent = target;
+				wantsToTeleport = false;
+				System.out.println(String.format("Teleported to target location(%s)", target.toString()));
+				release();
+				return;
+			}
+			y++;
+		}
 	}
+
+
 
 	private void tick() {
 		long time = System.currentTimeMillis();
@@ -186,21 +222,6 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
-		compound.setInteger("scale", scale);
-		compound.setInteger("hours", hours);
-		compound.setInteger("minutes", minutes);
-		compound.setInteger("seconds", seconds);
-		compound.setInteger("milliseconds", milliseconds);
-		compound.setInteger("timeUntillTeleport", timeUntillTeleport);
-		compound.setBoolean("stillHere", stillHere);
-		compound.setBoolean("formedFrame", formedFrame);
-		if (!stillHere)
-			compound.setLong("whereItWent", whereItWent.toLong());
-	}
-
-	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		writeToNBT(tag);
@@ -213,19 +234,44 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 		worldObj.markBlockRangeForRenderUpdate(pos, pos);
 	}
 
+	public void writeToTeleportNBT(NBTTagCompound compound) {
+		compound.setInteger("scale", scale);
+		compound.setInteger("hours", hours);
+		compound.setInteger("minutes", minutes);
+		compound.setInteger("seconds", seconds);
+		compound.setInteger("milliseconds", milliseconds);
+	}
+
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
+	public void writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		writeToTeleportNBT(compound);
+		compound.setInteger("timeUntillTeleport", timeUntillTeleport);
+		compound.setBoolean("stillHere", stillHere);
+		compound.setBoolean("formedFrame", formedFrame);
+		if (!stillHere)
+			compound.setLong("whereItWent", whereItWent.toLong());
+		compound.setBoolean("wantsToTeleport", wantsToTeleport);
+	}
+
+	public void readFromTeleportNBT(NBTTagCompound compound) {
 		scale = compound.getInteger("scale");
 		hours = compound.getInteger("hours");
 		minutes = compound.getInteger("minutes");
 		seconds = compound.getInteger("seconds");
 		milliseconds = compound.getInteger("milliseconds");
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		readFromTeleportNBT(compound);
 		timeUntillTeleport = compound.getInteger("timeUntillTeleport");
 		stillHere = compound.getBoolean("stillHere");
 		formedFrame = compound.getBoolean("formedFrame");
 		if (!stillHere)
 			whereItWent = BlockPos.fromLong(compound.getLong("whereItWent"));
+		wantsToTeleport = compound.getBoolean("wantsToTeleport");
 	}
 
 	public int getScale() {
@@ -236,5 +282,9 @@ public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayer
 
 	public boolean isStillHere() {
 		return stillHere;
+	}
+
+	public BlockPos getWhereItWent() {
+		return whereItWent;
 	}
 }

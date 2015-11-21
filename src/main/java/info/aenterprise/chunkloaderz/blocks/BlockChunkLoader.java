@@ -38,6 +38,8 @@ public class BlockChunkLoader extends Block {
 		stateMap.put(0, getDefaultState());
         stateMap.put(1, getDefaultState().withProperty(STATUS, EnumStatus.HIDDEN));
         stateMap.put(2, getDefaultState().withProperty(STATUS, EnumStatus.MASTER));
+		setHardness(2.5f);
+		setResistance(2.5f);
 	}
 
 	@Override

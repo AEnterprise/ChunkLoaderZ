@@ -6,6 +6,8 @@ import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityChunkLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -32,6 +34,7 @@ public class BlockLoader {
 
 	public static void addRecipes() {
 		GameRegistry.addSmelting(ItemLoader.brokenAnchoredPearl, new ItemStack(anchoredPearl), 0.5f);
+		GameRegistry.addRecipe(new ItemStack(chunkLoader, 26), "DED", "ESE", "DED", 'D', Blocks.diamond_block, 'E', Blocks.end_stone, 'S', Items.nether_star);
 	}
 
 	private static Block registerBlock(String name) {
