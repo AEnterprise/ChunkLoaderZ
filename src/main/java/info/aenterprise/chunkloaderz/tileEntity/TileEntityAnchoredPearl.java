@@ -1,28 +1,26 @@
 package info.aenterprise.chunkloaderz.tileEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import info.aenterprise.chunkloaderz.ChunkLoaderZ;
+import info.aenterprise.chunkloaderz.blocks.BlockLoader;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ITickable;
 import net.minecraft.world.ChunkCoordIntPair;
-
 import net.minecraftforge.common.ForgeChunkManager;
 
-import info.aenterprise.chunkloaderz.ChunkLoaderZ;
-import info.aenterprise.chunkloaderz.blocks.BlockLoader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by AEnterprise
  */
-public class TileEntityAnchoredPearl extends TileEntity implements IUpdatePlayerListBox {
+public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 	private int scale = 1;
 	private int hours, minutes, seconds, milliseconds, timeUntillTeleport, timer;
 	private long lastTime;

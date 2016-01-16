@@ -17,8 +17,8 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void registerInventoryModel(Item item, int meta, String blockname) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("chunkloaderz:" + blockname, "inventory"));
+	public void registerInventoryModel(Item item, int meta, String itemname) {
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("chunkloaderz:" + itemname, "inventory"));
 	}
 
 	@Override

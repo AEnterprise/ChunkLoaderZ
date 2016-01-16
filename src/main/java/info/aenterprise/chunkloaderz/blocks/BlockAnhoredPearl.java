@@ -1,18 +1,17 @@
 package info.aenterprise.chunkloaderz.blocks;
 
 import info.aenterprise.chunkloaderz.ChunkLoaderZ;
-import info.aenterprise.chunkloaderz.blocks.properties.PropertyRange;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,8 +30,8 @@ import java.util.Locale;
  * Created by AEnterprise
  */
 public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
-	private static final PropertyRange SCALE = new PropertyRange("scale", 0, 10, 1);
 	private static final PropertyEnum LOCATION = PropertyEnum.create("location", EnumLocation.class);
+	private static final PropertyInteger SCALE = PropertyInteger.create("scale", 0, 10);
 
 	public BlockAnhoredPearl() {
 		super(Material.iron);
