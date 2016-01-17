@@ -4,4 +4,9 @@ tile.anchoredPearl.name=Anchored Pearl
 item.guardianPearl.name=Guard Pearl
 item.guardianPearlShard.name=Guard Pearl Shard
 item.enderPearlShard.name=Ender Pearl Shard
-item.brokenAnchoredPearl=Broken Anchored Pearl
+item.brokenAnchoredPearl.name=Broken Anchored Pearl
+
+enderPearlShard.desc=To get Ender Pearl Shards drop one or more enderpearls on the ground and blow them up with TNT.
+anchoredPearl.desc=This pearl will load an area of 3x3 chunks around it for 9 hours. If it's not fully encased in a frame made with Anchored Frame blocks it will teleport away after a (long) while. That leaves behind a ghost pearl that tells you where it went.
+guardianPearlShard.desc=To get Guard Pearl Shards drop one or more Guard Pearls on the ground and blow them up with TNT.
+guardianPearl.desc=This pearl drops when killing a Guardian
