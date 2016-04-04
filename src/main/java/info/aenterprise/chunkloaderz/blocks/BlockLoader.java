@@ -5,9 +5,8 @@ import info.aenterprise.chunkloaderz.items.ItemLoader;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityChunkLoader;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -20,12 +19,14 @@ public class BlockLoader {
 
 	public static void init() {
 		chunkLoader = new BlockChunkLoader();
-		GameRegistry.registerBlock(chunkLoader, "blockChunkLoader");
+		GameRegistry.register(chunkLoader);
+		GameRegistry.register(new ItemBlock(chunkLoader).setRegistryName(chunkLoader.getRegistryName()));
 		ChunkLoaderZ.proxy.registerInventoryModel(chunkLoader, "blockChunkLoader");
 
 
 		anchoredPearl = new BlockAnhoredPearl();
-		GameRegistry.registerBlock(anchoredPearl, "anchoredPearl");
+		GameRegistry.register(anchoredPearl);
+		GameRegistry.register(new ItemBlock(anchoredPearl).setRegistryName(anchoredPearl.getRegistryName()));
 		ChunkLoaderZ.proxy.registerInventoryModel(anchoredPearl, "anchoredPearl");
 
 		GameRegistry.registerTileEntity(TileEntityAnchoredPearl.class, "anchoredpearl");
@@ -35,12 +36,5 @@ public class BlockLoader {
 	public static void addRecipes() {
 		GameRegistry.addSmelting(ItemLoader.brokenAnchoredPearl, new ItemStack(anchoredPearl), 0.5f);
 		GameRegistry.addRecipe(new ItemStack(chunkLoader, 4), "SES", "E E", "SES", 'E', Blocks.end_stone, 'S', ItemLoader.enderPearlShard);
-	}
-
-	private static Block registerBlock(String name) {
-		Block block = new Block(Material.iron).setUnlocalizedName(name).setCreativeTab(ChunkLoaderZ.creativeTab);
-		GameRegistry.registerBlock(block, name);
-		ChunkLoaderZ.proxy.registerInventoryModel(block, name);
-		return block;
 	}
 }

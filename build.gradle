@@ -41,7 +41,7 @@ archivesBaseName = "ChunkLoaderZ-${config.version.mc}"
 
 
 minecraft {
-    version = "1.8.9-11.15.0.1699"
+    version = "${config.version.mc}-${config.version.forge}-${config.version.mc}"
     runDir = "run"
     useDepAts = true
     replace "@MODVERSION@", config.version.mod
@@ -51,12 +51,12 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20160107"
+    mappings = "${config.version.mappings}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_1.8.9:2.18.1.88"
+    deobfCompile "mezz.jei:jei_${config.version.mc}:${config.version.jei}"
 }
 
 processResources

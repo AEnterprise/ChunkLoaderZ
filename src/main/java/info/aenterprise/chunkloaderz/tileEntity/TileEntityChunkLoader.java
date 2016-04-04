@@ -3,7 +3,7 @@ package info.aenterprise.chunkloaderz.tileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -34,7 +34,7 @@ public class TileEntityChunkLoader extends TileEntity {
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 		worldObj.markBlockRangeForRenderUpdate(pos, pos);
 	}
@@ -43,6 +43,6 @@ public class TileEntityChunkLoader extends TileEntity {
 	public Packet getDescriptionPacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		writeToNBT(tag);
-		return new S35PacketUpdateTileEntity(pos, 0, tag);
+		return new SPacketUpdateTileEntity(pos, 0, tag);
 	}
 }

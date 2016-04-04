@@ -7,7 +7,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -15,10 +15,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -36,6 +38,7 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	public BlockAnhoredPearl() {
 		super(Material.iron);
 		setUnlocalizedName("anchoredPearl");
+		setRegistryName("anchoredPearl");
 		setLightLevel(15);
 		setCreativeTab(ChunkLoaderZ.creativeTab);
 		this.isBlockContainer = true;
@@ -45,13 +48,13 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		TileEntity entity = world.getTileEntity(pos);
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity entity = worldIn.getTileEntity(pos);
 		if (entity instanceof TileEntityAnchoredPearl) {
 			TileEntityAnchoredPearl pearl = (TileEntityAnchoredPearl) entity;
-			if (!pearl.isStillHere() && !world.isRemote) {
+			if (!pearl.isStillHere() && !worldIn.isRemote) {
 				BlockPos whereItWent = pearl.getWhereItWent();
-				player.addChatComponentMessage(new ChatComponentText(String.format("This pearl teleported to %d, %d, %d", whereItWent.getX(), whereItWent.getY(), whereItWent.getZ())));
+				playerIn.addChatComponentMessage(new TextComponentString(String.format("This pearl teleported to %d, %d, %d", whereItWent.getX(), whereItWent.getY(), whereItWent.getZ())));
 			}
 			return true;
 		}
@@ -70,6 +73,7 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		if (world.isRemote) return;
 		TileEntity entity = world.getTileEntity(pos);
 		if (entity instanceof TileEntityAnchoredPearl) {
 			TileEntityAnchoredPearl pearl = (TileEntityAnchoredPearl) entity;
@@ -94,23 +98,6 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public int getRenderType() {
-		return 3;
-	}
-
-
-	@Override
-	public boolean isFullCube() {
-		return false;
-	}
-
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		TileEntity entity = worldIn.getTileEntity(pos);
 		if (entity instanceof TileEntityAnchoredPearl)
@@ -119,8 +106,8 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, SCALE, LOCATION);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, SCALE, LOCATION);
 	}
 
 	@Override
@@ -134,7 +121,17 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 		worldIn.removeTileEntity(pos);
 	}
 
-	public enum EnumLocation implements IStringSerializable	{
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.SOLID;
+	}
+
+	public enum EnumLocation implements IStringSerializable {
 		HERE,
 		THERE;
 
@@ -142,5 +139,10 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 		public String getName() {
 			return name().toLowerCase(Locale.ROOT);
 		}
+	}
+
+	@Override
+	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return false;
 	}
 }

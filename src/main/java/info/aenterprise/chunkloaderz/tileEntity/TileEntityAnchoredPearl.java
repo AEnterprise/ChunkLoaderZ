@@ -6,10 +6,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
 
@@ -82,11 +82,10 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 			worldObj.setBlockToAir(pos);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void deform() {
 		if (!formedFrame)
 			return;
-		for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
+		for (BlockPos pos : BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
 			IBlockState state = getWorld().getBlockState(pos);
 			if (state.getBlock() == BlockLoader.chunkLoader) {
 				BlockLoader.chunkLoader.deform(getWorld(), pos);
@@ -107,7 +106,6 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 
 		while (y < 254) {
 			BlockPos target = new BlockPos(x, y, z);
-			System.out.println(String.format("Considering target location(%s)", target.toString()));
 			if (worldObj.isAirBlock(target)) {
 				worldObj.setBlockState(target, BlockLoader.anchoredPearl.getDefaultState());
 				NBTTagCompound tag = new NBTTagCompound();
@@ -117,7 +115,7 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 					((TileEntityAnchoredPearl) entity).readFromTeleportNBT(tag);
 				}
 				stillHere = false;
-				worldObj.markBlockForUpdate(pos);
+				worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
 				worldObj.markBlockRangeForRenderUpdate(pos, pos);
 				whereItWent = target;
 				wantsToTeleport = false;
@@ -143,7 +141,7 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		if (seconds <= 0) {
 			if (minutes == 30 || minutes == 1) {
 				scale++;
-				worldObj.markBlockForUpdate(pos);
+				worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
 				worldObj.markBlockRangeForRenderUpdate(pos, pos);
 			}
 			seconds += 60;
@@ -156,9 +154,8 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public void form() {
-		for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
+		for (BlockPos pos : BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
 			IBlockState state = getWorld().getBlockState(pos);
 			if (state.getBlock() == BlockLoader.chunkLoader) {
 				if (pos.equals(getPos().up())) {
@@ -175,9 +172,8 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		return stillHere && hours + minutes + seconds + milliseconds != 0;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean validFrame() {
-		for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
+		for (BlockPos pos : BlockPos.getAllInBox(getPos().add(-1, -1, -1), getPos().add(1, 1, 1))) {
 			if (pos.equals(getPos()))
 				continue;
 			IBlockState state = getWorld().getBlockState(pos);
@@ -227,13 +223,12 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 	public Packet getDescriptionPacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		writeToNBT(tag);
-		return new S35PacketUpdateTileEntity(pos, 0, tag);
+		return new SPacketUpdateTileEntity(pos, 0, tag);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.getNbtCompound());
-		worldObj.markBlockRangeForRenderUpdate(pos, pos);
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
 	}
 
 	public void writeToTeleportNBT(NBTTagCompound compound) {

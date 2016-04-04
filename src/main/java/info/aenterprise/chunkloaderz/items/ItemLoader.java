@@ -28,8 +28,8 @@ public class ItemLoader {
 
 
 	private static Item registerItem(String name) {
-		Item item = new Item().setUnlocalizedName(name).setCreativeTab(ChunkLoaderZ.creativeTab);
-		GameRegistry.registerItem(item, name);
+		Item item = new Item().setUnlocalizedName(name).setCreativeTab(ChunkLoaderZ.creativeTab).setRegistryName(name);
+		GameRegistry.register(item);
 		ChunkLoaderZ.proxy.registerInventoryModel(item, name);
 		return item;
 	}
