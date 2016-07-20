@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = ChunkLoaderZ.MODID, version = ChunkLoaderZ.VERSION)
+@Mod(modid = ChunkLoaderZ.MODID, version = ChunkLoaderZ.VERSION, acceptedMinecraftVersions = "[1.9.4,1.10.2]")
 public class ChunkLoaderZ {
 	public static final String MODID = "chunkloaderz";
 	public static final String VERSION = "@MODVERSION@";

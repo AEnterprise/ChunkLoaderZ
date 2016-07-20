@@ -23,7 +23,7 @@ public class ItemLoader {
 	}
 
 	public static void addRecipes() {
-		GameRegistry.addRecipe(new ItemStack(brokenAnchoredPearl), "geg", "epe", "geg", 'g', guardianPearlShard, 'e', enderPearlShard, 'p', Items.ender_pearl);
+		GameRegistry.addRecipe(new ItemStack(brokenAnchoredPearl), "geg", "epe", "geg", 'g', guardianPearlShard, 'e', enderPearlShard, 'p', Items.ENDER_PEARL);
 	}
 
 

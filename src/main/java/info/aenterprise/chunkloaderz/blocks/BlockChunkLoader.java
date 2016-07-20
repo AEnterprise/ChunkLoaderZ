@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 /**
@@ -25,7 +26,7 @@ public class BlockChunkLoader extends Block {
 	private final BiMap<Integer, IBlockState> stateMap = HashBiMap.create();
 
 	public BlockChunkLoader() {
-		super(Material.iron);
+		super(Material.IRON);
 		setUnlocalizedName("blockChunkLoader");
 		setRegistryName("blockChunkLoader");
 		setLightLevel(1.0f);
@@ -39,6 +40,7 @@ public class BlockChunkLoader extends Block {
 		setResistance(2.5f);
 	}
 
+	@Nonnull
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, STATUS);
@@ -50,6 +52,8 @@ public class BlockChunkLoader extends Block {
 		return 0;
 	}
 
+	@Nonnull
+	@Deprecated
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		if (stateMap.containsKey(meta)) return stateMap.get(meta);
@@ -69,15 +73,16 @@ public class BlockChunkLoader extends Block {
 	}
 
 	public boolean isAlone(World world, BlockPos pos) {
-		return getActualState(getDefaultState(), world, pos).getProperties().get(STATUS).equals(EnumStatus.ALONE);
+		return getDefaultState().getActualState(world, pos).getProperties().get(STATUS).equals(EnumStatus.ALONE);
 	}
 
-
+	@Deprecated
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
+	@Nonnull
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;

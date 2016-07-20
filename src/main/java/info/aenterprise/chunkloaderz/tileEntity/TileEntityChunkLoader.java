@@ -6,6 +6,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by AEnterprise
  */
@@ -27,10 +29,13 @@ public class TileEntityChunkLoader extends TileEntity {
 		status = compound.getInteger("status");
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setInteger("status", status);
+
+		return compound;
 	}
 
 	@Override
@@ -40,9 +45,10 @@ public class TileEntityChunkLoader extends TileEntity {
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		writeToNBT(tag);
 		return new SPacketUpdateTileEntity(pos, 0, tag);
 	}
+
 }

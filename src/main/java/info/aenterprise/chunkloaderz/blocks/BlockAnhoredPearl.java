@@ -24,6 +24,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -31,12 +32,12 @@ import java.util.Locale;
 /**
  * Created by AEnterprise
  */
-public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
+public class BlockAnhoredPearl extends Block {
 	private static final PropertyEnum LOCATION = PropertyEnum.create("location", EnumLocation.class);
 	private static final PropertyInteger SCALE = PropertyInteger.create("scale", 0, 10);
 
 	public BlockAnhoredPearl() {
-		super(Material.iron);
+		super(Material.IRON);
 		setUnlocalizedName("anchoredPearl");
 		setRegistryName("anchoredPearl");
 		setLightLevel(15);
@@ -62,12 +63,19 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
+	}
+
+	@Nonnull
+	@Override
+	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		return new TileEntityAnchoredPearl();
 	}
 
+	@Nonnull
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
 		return new ArrayList<ItemStack>();
 	}
 
@@ -97,14 +105,17 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 		}
 	}
 
+	@Nonnull
+	@Deprecated
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		TileEntity entity = worldIn.getTileEntity(pos);
 		if (entity instanceof TileEntityAnchoredPearl)
 			return state.withProperty(SCALE, ((TileEntityAnchoredPearl) entity).getScale()).withProperty(LOCATION, ((TileEntityAnchoredPearl) entity).isStillHere() ? EnumLocation.HERE : EnumLocation.THERE);
 		return state.withProperty(SCALE, 1).withProperty(LOCATION, EnumLocation.HERE);
 	}
 
+	@Nonnull
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, SCALE, LOCATION);
@@ -116,16 +127,18 @@ public class BlockAnhoredPearl extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		super.breakBlock(worldIn, pos, state);
-		worldIn.removeTileEntity(pos);
+	public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+		super.breakBlock(world, pos, state);
+		world.removeTileEntity(pos);
 	}
 
+	@Deprecated
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
+	@Nonnull
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.SOLID;

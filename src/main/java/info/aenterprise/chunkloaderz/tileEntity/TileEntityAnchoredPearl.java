@@ -5,14 +5,15 @@ import info.aenterprise.chunkloaderz.blocks.BlockLoader;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.ForgeChunkManager;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -190,7 +191,7 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 			ticket.getModData().setInteger("x", pos.getX());
 			ticket.getModData().setInteger("y", pos.getY());
 			ticket.getModData().setInteger("z", pos.getZ());
-			for (ChunkCoordIntPair chunk: getChunksAround(pos.getX() >> 4, pos.getZ() >> 4, 1)) {
+			for (ChunkPos chunk: getChunksAround(pos.getX() >> 4, pos.getZ() >> 4, 1)) {
 				ForgeChunkManager.forceChunk(ticket, chunk);
 			}
 		}
@@ -203,11 +204,11 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		deform();
 	}
 
-	private List<ChunkCoordIntPair> getChunksAround(int chunkX, int chunkZ, int radius) {
-		List<ChunkCoordIntPair> list = new ArrayList<ChunkCoordIntPair>();
+	private List<ChunkPos> getChunksAround(int chunkX, int chunkZ, int radius) {
+		List<ChunkPos> list = new ArrayList<ChunkPos>();
 		for (int x = chunkX - radius; x <= chunkX + radius; x++) {
 			for (int z = chunkZ - radius; z <= chunkZ + radius; z++) {
-				list.add(new ChunkCoordIntPair(x, z));
+				list.add(new ChunkPos(x, z));
 			}
 		}
 		return list;
@@ -219,8 +220,9 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		release();
 	}
 
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		writeToNBT(tag);
 		return new SPacketUpdateTileEntity(pos, 0, tag);
@@ -239,8 +241,9 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		compound.setInteger("milliseconds", milliseconds);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		writeToTeleportNBT(compound);
 		compound.setInteger("timeUntillTeleport", timeUntillTeleport);
@@ -249,6 +252,8 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		if (!stillHere)
 			compound.setLong("whereItWent", whereItWent.toLong());
 		compound.setBoolean("wantsToTeleport", wantsToTeleport);
+
+		return compound;
 	}
 
 	public void readFromTeleportNBT(NBTTagCompound compound) {

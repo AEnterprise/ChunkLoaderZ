@@ -34,7 +34,7 @@ public class EventListener {
 			Entity entity = iterator.next();
 			if (entity instanceof EntityItem) {
 				ItemStack stack = ((EntityItem) entity).getEntityItem();
-				if (stack.getItem() == Items.ender_pearl) {
+				if (stack.getItem() == Items.ENDER_PEARL) {
 					((EntityItem) entity).setEntityItemStack(new ItemStack(ItemLoader.enderPearlShard, stack.stackSize * 4));
 					iterator.remove();
 				} else if (stack.getItem() == ItemLoader.guardianPearl) {
