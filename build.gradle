@@ -56,8 +56,13 @@ minecraft {
 }
 
 dependencies {
+// compile against the JEI API
+    //deobfCompile "mezz.jei:jei_${config.version.mc}:${config.version.jei}:api"
+// at runtime, use the full JEI jar
     deobfCompile "mezz.jei:jei_${config.version.mc}:${config.version.jei}"
 }
+
+
 
 processResources
 {

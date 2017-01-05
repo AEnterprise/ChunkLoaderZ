@@ -41,7 +41,7 @@ public class TileEntityChunkLoader extends TileEntity {
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
-		worldObj.markBlockRangeForRenderUpdate(pos, pos);
+		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class EventListener {
 	public void livingDeath(LivingDropsEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity instanceof EntityGuardian) {
-			EntityItem entityItem = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, new ItemStack(ItemLoader.guardianPearl));
+			EntityItem entityItem = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, new ItemStack(ItemLoader.guardianPearl));
 			event.getDrops().add(entityItem);
 		}
 	}
@@ -35,10 +35,10 @@ public class EventListener {
 			if (entity instanceof EntityItem) {
 				ItemStack stack = ((EntityItem) entity).getEntityItem();
 				if (stack.getItem() == Items.ENDER_PEARL) {
-					((EntityItem) entity).setEntityItemStack(new ItemStack(ItemLoader.enderPearlShard, stack.stackSize * 4));
+					((EntityItem) entity).setEntityItemStack(new ItemStack(ItemLoader.enderPearlShard, stack.getCount() * 4));
 					iterator.remove();
 				} else if (stack.getItem() == ItemLoader.guardianPearl) {
-					((EntityItem) entity).setEntityItemStack(new ItemStack(ItemLoader.guardianPearlShard, stack.stackSize * 4));
+					((EntityItem) entity).setEntityItemStack(new ItemStack(ItemLoader.guardianPearlShard, stack.getCount() * 4));
 					iterator.remove();
 				}
 			}

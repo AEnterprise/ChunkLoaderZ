@@ -3,7 +3,6 @@ package info.aenterprise.chunkloaderz.blocks;
 import info.aenterprise.chunkloaderz.ChunkLoaderZ;
 import info.aenterprise.chunkloaderz.tileEntity.TileEntityAnchoredPearl;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
@@ -49,13 +48,13 @@ public class BlockAnhoredPearl extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity entity = worldIn.getTileEntity(pos);
 		if (entity instanceof TileEntityAnchoredPearl) {
 			TileEntityAnchoredPearl pearl = (TileEntityAnchoredPearl) entity;
 			if (!pearl.isStillHere() && !worldIn.isRemote) {
 				BlockPos whereItWent = pearl.getWhereItWent();
-				playerIn.addChatComponentMessage(new TextComponentString(String.format("This pearl teleported to %d, %d, %d", whereItWent.getX(), whereItWent.getY(), whereItWent.getZ())));
+				playerIn.sendMessage(new TextComponentString(String.format("This pearl teleported to %d, %d, %d", whereItWent.getX(), whereItWent.getY(), whereItWent.getZ())));
 			}
 			return true;
 		}
@@ -91,7 +90,7 @@ public class BlockAnhoredPearl extends Block {
 				pearl.writeToTeleportNBT(tag);
 				stack.setTagCompound(tag);
 				EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack);
-				world.spawnEntityInWorld(entityItem);
+				world.spawnEntity(entityItem);
 			}
 		}
 	}

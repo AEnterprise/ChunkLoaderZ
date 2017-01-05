@@ -44,7 +44,7 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (worldObj.isRemote) return;
+		if (world.isRemote) return;
 
 		if (wantsToTeleport) {
 			tryTeleporting();
@@ -69,18 +69,18 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		}
 		if (canChunkload()) {
 			if (ticket == null) {
-				setTicket(ForgeChunkManager.requestTicket(ChunkLoaderZ.INSTANCE, worldObj, ForgeChunkManager.Type.NORMAL));
+				setTicket(ForgeChunkManager.requestTicket(ChunkLoaderZ.INSTANCE, world, ForgeChunkManager.Type.NORMAL));
 			}
 			tick();
 		} else {
 			if (ticket != null)
 				release();
 			if (stillHere)
-				worldObj.setBlockToAir(pos);
+				world.setBlockToAir(pos);
 		}
 
 		if (hours + minutes + seconds + milliseconds <= 0)
-			worldObj.setBlockToAir(pos);
+			world.setBlockToAir(pos);
 	}
 
 	private void deform() {
@@ -96,9 +96,9 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 	}
 
 	private void tryTeleporting() {
-		int x = ((int) Math.floor(RANGE / 2 * worldObj.rand.nextDouble())) - RANGE + getPos().getX();
-		int y = ((int) Math.floor(RANGE / 2 * worldObj.rand.nextDouble())) - RANGE + getPos().getY();
-		int z = ((int) Math.floor(RANGE / 2 * worldObj.rand.nextDouble())) - RANGE + getPos().getZ();
+		int x = ((int) Math.floor(RANGE / 2 * world.rand.nextDouble())) - RANGE + getPos().getX();
+		int y = ((int) Math.floor(RANGE / 2 * world.rand.nextDouble())) - RANGE + getPos().getY();
+		int z = ((int) Math.floor(RANGE / 2 * world.rand.nextDouble())) - RANGE + getPos().getZ();
 
 		if (y < 0)
 			y = 0;
@@ -107,17 +107,17 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 
 		while (y < 254) {
 			BlockPos target = new BlockPos(x, y, z);
-			if (worldObj.isAirBlock(target)) {
-				worldObj.setBlockState(target, BlockLoader.anchoredPearl.getDefaultState());
+			if (world.isAirBlock(target)) {
+				world.setBlockState(target, BlockLoader.anchoredPearl.getDefaultState());
 				NBTTagCompound tag = new NBTTagCompound();
 				writeToTeleportNBT(tag);
-				TileEntity  entity = worldObj.getTileEntity(target);
+				TileEntity  entity = world.getTileEntity(target);
 				if (entity instanceof TileEntityAnchoredPearl) {
 					((TileEntityAnchoredPearl) entity).readFromTeleportNBT(tag);
 				}
 				stillHere = false;
-				worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
-				worldObj.markBlockRangeForRenderUpdate(pos, pos);
+				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+				world.markBlockRangeForRenderUpdate(pos, pos);
 				whereItWent = target;
 				wantsToTeleport = false;
 				System.out.println(String.format("Teleported to target location(%s)", target.toString()));
@@ -142,8 +142,8 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 		if (seconds <= 0) {
 			if (minutes == 30 || minutes == 1) {
 				scale++;
-				worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
-				worldObj.markBlockRangeForRenderUpdate(pos, pos);
+				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+				world.markBlockRangeForRenderUpdate(pos, pos);
 			}
 			seconds += 60;
 			minutes--;
@@ -178,7 +178,7 @@ public class TileEntityAnchoredPearl extends TileEntity implements ITickable {
 			if (pos.equals(getPos()))
 				continue;
 			IBlockState state = getWorld().getBlockState(pos);
-			if (!(state.getBlock() == BlockLoader.chunkLoader && BlockLoader.chunkLoader.isAlone(worldObj, pos))) {
+			if (!(state.getBlock() == BlockLoader.chunkLoader && BlockLoader.chunkLoader.isAlone(world, pos))) {
 				return false;
 			}
 		}

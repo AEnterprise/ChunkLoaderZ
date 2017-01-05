@@ -2,10 +2,8 @@ package info.aenterprise.chunkloaderz.compat;
 
 import info.aenterprise.chunkloaderz.blocks.BlockLoader;
 import info.aenterprise.chunkloaderz.items.ItemLoader;
-import mezz.jei.api.IJeiRuntime;
-import mezz.jei.api.IModPlugin;
-import mezz.jei.api.IModRegistry;
-import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.*;
+import mezz.jei.api.ingredients.IModIngredientRegistration;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -16,6 +14,16 @@ import javax.annotation.Nonnull;
  */
 @JEIPlugin
 public class JEICompat implements IModPlugin {
+
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+
+	}
+
+	@Override
+	public void registerIngredients(IModIngredientRegistration registry) {
+
+	}
 
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
